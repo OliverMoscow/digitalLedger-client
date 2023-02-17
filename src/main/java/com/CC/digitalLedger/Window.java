@@ -4,13 +4,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import java.io.*;
-import java.security.NoSuchAlgorithmException;
 
 
 public class Window {
-    public Window() throws IOException, InterruptedException, NoSuchAlgorithmException {
-        ServerRequest requestInfo = new ServerRequest("https://f69d-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
+    public Window() throws Exception {
+        ServerRequest requestInfo = new ServerRequest("https://3d99-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
+//        publicPrivate theKey = new publicPrivate();
         //FRAME
         JFrame newFrame = new JFrame("Welcome to the Gold Card Money Transferring System");
         newFrame.setSize(900, 600);
@@ -25,7 +24,11 @@ public class Window {
         JButton userButton = new JButton("Find User");
 
         //TEXT AREA
-        JTextField publicKeyInsert = new JTextField();
+        
+        
+        JTextField userName = new JTextField();
+//        String inputUsername = userName.getText();
+//        inputUsername = requestInfo.getUserFromName(requestInfo.name);
 
         JTextArea displayTransactions = new JTextArea();
         displayTransactions.setWrapStyleWord(true);
@@ -33,18 +36,20 @@ public class Window {
         displayTransactions.setText(requestInfo.getLedger());
 
         JTextArea displayBalance = new JTextArea();
-        //displayBalance.setText(requestInfo.getBalance());
+        displayBalance.setText(requestInfo.getBalance(requestInfo.publicKey));
 
         //JLABEL
         JLabel currentBalance = new JLabel("Current Balance:");
 
-        JLabel enterPublicKey = new JLabel("Enter the user account number: "); //finds user based on public key
+        JLabel enterPublicKey = new JLabel("Enter the user's name: "); //finds user based on public key
 
         JLabel transactionHistory = new JLabel("Transaction History:");
 
-        ServerRequest sr = new ServerRequest("https://e2ab-192-70-253-79.ngrok.io");
-        //FIX THIS GUI LATER
-        JLabel keys = new JLabel("                       Public Key: " + sr.publicKey + "                                     Private Key: " + sr.privateKey);
+        JLabel publicKey = new JLabel("Public Key: ");
+        publicKey.setText("<html>"+ requestInfo.publicKey +"</html>");
+
+        JLabel privateKey = new JLabel("Private Key: ");
+        privateKey.setText("<html>"+ requestInfo.privateKey +"</html>");
 
         JTextField displayFunds = new JTextField(); //for the second window
 
@@ -58,11 +63,12 @@ public class Window {
         newPanel.add(currentBalance);
         newPanel.add(displayBalance);
         newPanel.add(enterPublicKey);
-        newPanel.add(publicKeyInsert);
+        newPanel.add(userName);
         newPanel.add(userButton);
         newPanel.add(transactionHistory);
         newPanel.add(displayTransactions);
-        newPanel.add(keys);
+        newPanel.add(publicKey);
+        newPanel.add(privateKey);
 
 
         class userButtonListener implements ActionListener {
@@ -95,7 +101,7 @@ public class Window {
                 catch(Exception e1) {
                     System.out.println("info didn't send. check button");
                     }
-               amountFrame.dispose();
+                amountFrame.dispose();
                 }
             }
         sendButton.addActionListener(new sendButtonListener());

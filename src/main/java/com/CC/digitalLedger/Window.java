@@ -5,10 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.io.*;
+import java.security.NoSuchAlgorithmException;
 
 
 public class Window {
-    public Window() throws IOException, InterruptedException {
+    public Window() throws IOException, InterruptedException, NoSuchAlgorithmException {
         ServerRequest requestInfo = new ServerRequest("https://f69d-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
         //FRAME
         JFrame newFrame = new JFrame("Welcome to the Gold Card Money Transferring System");
@@ -41,8 +42,9 @@ public class Window {
 
         JLabel transactionHistory = new JLabel("Transaction History:");
 
+        ServerRequest sr = new ServerRequest("https://e2ab-192-70-253-79.ngrok.io");
         //FIX THIS GUI LATER
-        JLabel keys = new JLabel("                       Public Key: " + "public_key" + "                                     Private Key: " + "private_key");
+        JLabel keys = new JLabel("                       Public Key: " + sr.publicKey + "                                     Private Key: " + sr.privateKey);
 
         JTextField displayFunds = new JTextField(); //for the second window
 

@@ -5,14 +5,23 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.security.*;
+import java.util.Base64;
 
 //runs on http://127.0.0.1 or localhost, which means your own computer
 public class ServerRequest {
     public String domain;
+    public KeyPair keyPair = KeyPairGenerator.getInstance("RSA").generateKeyPair();
+    public PublicKey publicKey = keyPair.getPublic();
+    public PrivateKey privateKey = keyPair.getPrivate();
 
-    public ServerRequest(String domain) {
+    public Base64.Encoder encoder = Base64.getEncoder();
+
+    public ServerRequest(String domain) throws NoSuchAlgorithmException {
         this.domain = domain;
+
     }
+
     //private key in a file somewhere
 
     //A get request with an endpoint. Make sure there is NO "/" at the beginning of endpoint.
@@ -35,16 +44,18 @@ public class ServerRequest {
 //        return getRequest("transactions/" + publicKey);
 //    }
 
-    public String getBalance(String publicKey) throws IOException, InterruptedException {
-        return getRequest("balance/" + publicKey);
+    public String getBalance(PublicKey publicKey) throws IOException, InterruptedException {
+        String publicKeyStr = encoder.encodeToString(publicKey.getEncoded());
+        return getRequest("balance/" + publicKeyStr);
     } //USER INFO for public key and name
 
     public String getUsers() throws IOException, InterruptedException { //returns every single user
         return getRequest("users");
     }
 
-    public String getUserFromKey(String publicKey) throws IOException, InterruptedException { //pick this one or next one
-        return getRequest("users/" + publicKey);
+    public String getUserFromKey(PublicKey publicKey) throws IOException, InterruptedException { //pick this one or next one
+        String publicKeyStr = encoder.encodeToString(publicKey.getEncoded());
+        return getRequest("users/" + publicKeyStr);
     }
 
     public String getUserFromName(String name) throws IOException, InterruptedException {
@@ -78,7 +89,12 @@ public class ServerRequest {
     }
 
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+
+
+
+
+
+    public static void main(String[] args) throws IOException, InterruptedException, NoSuchAlgorithmException {
         //Initialize server with a running ngrok port. Make sure there is NO "/" at the end ;)
         ServerRequest server = new ServerRequest("https://e2ab-192-70-253-79.ngrok.io");
         System.out.println(server.getLedger());

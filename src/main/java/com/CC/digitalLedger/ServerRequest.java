@@ -73,13 +73,12 @@ public class ServerRequest {
         return response.body();
     }
 
-    public String newUser() throws IOException, InterruptedException {
+    public String newUser(String name, String publicKey) throws IOException, InterruptedException {
+        String req = String.format("{name: %s, publicKey: %2s", name, publicKey);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .GET()
+                .POST(HttpRequest.BodyPublishers.ofString(req))
                 .header("accept", "application/json")
-                //Set headers for post request. See google doc. https://www.baeldung.com/java-9-http-client.
-                .headers("key1", "value1", "key2", "value2")
                 .uri(URI.create(domain + "/newUser"))
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

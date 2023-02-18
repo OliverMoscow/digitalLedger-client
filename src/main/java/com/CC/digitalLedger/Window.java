@@ -8,67 +8,96 @@ import javax.swing.*;
 
 public class Window {
     public Window() throws Exception {
-        ServerRequest requestInfo = new ServerRequest("https://351e-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
+        ServerRequest requestInfo = new ServerRequest("https://3267-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
 
         //FRAME
-        JFrame newFrame = new JFrame("Welcome to the Gold Card Money Transferring System");
-        newFrame.setSize(900, 600);
-        newFrame.setVisible(true);
-        newFrame.setDefaultCloseOperation(3);
+        JFrame createFrame = new JFrame("Generation Page");
+        createFrame.setSize(600, 400);
+        createFrame.setVisible(true);
+        createFrame.setDefaultCloseOperation(3);
 
+        JFrame newFrame = new JFrame("Gold Card Money Transferring System");
+        newFrame.setDefaultCloseOperation(3);
 
         JFrame amountFrame = new JFrame("User: " + requestInfo.getUserFromName(requestInfo.name));
 
          //BUTTON
         JButton sendButton = new JButton("Transfer Funds");
         JButton userButton = new JButton(requestInfo.getUserFromName(requestInfo.name));
+        JButton createButton = new JButton("Create Account");
 
         //TEXT AREA
+        JTextField inputUser = new JTextField();
         JTextArea displayTransactions = new JTextArea();
         displayTransactions.setWrapStyleWord(true);
         displayTransactions.setLineWrap(true);
         displayTransactions.setText(requestInfo.getLedger());
-
         JTextArea displayBalance = new JTextArea();
         displayBalance.setText(requestInfo.getBalance(requestInfo.publicKey));
 
         //JLABEL
         JLabel currentBalance = new JLabel("Current Balance:");
-
         JLabel enterPublicKey = new JLabel("Transfer Money: "); //finds user based on public key
-
         JLabel transactionHistory = new JLabel("Transaction History:");
-
         JLabel publicKey = new JLabel("Public Key: ");
         publicKey.setText("<html>"+ requestInfo.publicKey +"</html>");
-
         JLabel privateKey = new JLabel("Private Key: ");
         privateKey.setText("<html>"+ requestInfo.privateKey +"</html>");
+        JLabel createUser = new JLabel("Input your name: ");
+        JLabel welcomeUser = new JLabel("Welcome to the Gold Card Money Transferring System, " + requestInfo.newUser(inputUser.getText(), requestInfo.publicKey));
+        JLabel information = new JLabel();
+        information.setText("<html>"+ "Welcome to the Gold Card money transferring website! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." +"</html>");
 
         JTextField displayFunds = new JTextField(); //for the second window
-
         JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + requestInfo.getUserFromName(requestInfo.name));
 
-        //PANELS AND GRIDS
+        //PANEL
         JPanel newPanel = new JPanel();
-        newFrame.add(newPanel);
-        GridLayout newGrid = new GridLayout(9, 1);
-        newPanel.setLayout(newGrid);
-        newPanel.add(currentBalance);
-        newPanel.add(displayBalance);
-        newPanel.add(enterPublicKey);
-        newPanel.add(userButton);
-        newPanel.add(transactionHistory);
-        newPanel.add(displayTransactions);
-        newPanel.add(publicKey);
-        newPanel.add(privateKey);
+        JPanel createPanel = new JPanel();
+        createFrame.add(createPanel);
+        GridLayout loginGrid = new GridLayout(6, 1);
+        createPanel.setLayout(loginGrid);
+        createPanel.add(createUser);
+        createPanel.add(inputUser);
+        createPanel.add(information);
+        createPanel.add(createButton);
+        createPanel.revalidate();
 
+
+        class createButtonListener implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //open new window
+                inputUser.getText(); //Name is already on server
+                try {
+                    requestInfo.newUser(inputUser.getText(), requestInfo.publicKey);
+                }
+                catch(Exception e2) {
+                    System.out.println("Failed to retrieve user info");
+                }
+                newFrame.setSize(900, 600);
+                newFrame.setVisible(true);
+
+                newFrame.add(newPanel);
+                GridLayout newGrid = new GridLayout(9, 1);
+                newPanel.setLayout(newGrid);
+                newPanel.add(welcomeUser);
+                newPanel.add(currentBalance);
+                newPanel.add(displayBalance);
+                newPanel.add(enterPublicKey);
+                newPanel.add(userButton);
+                newPanel.add(transactionHistory);
+                newPanel.add(displayTransactions);
+                newPanel.add(publicKey);
+                newPanel.add(privateKey);
+                createFrame.setVisible(false);
+            }
+        }
+        createButton.addActionListener(new createButtonListener());
 
         class userButtonListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e){
-                //FIND USER PUBLIC KEY CODE HERE
-
                 //OPEN NEW WINDOW
                 amountFrame.setVisible(true);
                 amountFrame.setSize(400, 200);
@@ -89,8 +118,7 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e){
                 try {
-                    requestInfo.send(); // this needs to be updated
-
+                    requestInfo.send();
                 }
                 catch(Exception e1) {
                     System.out.println("info didn't send. check button");

@@ -8,8 +8,8 @@ import javax.swing.*;
 
 public class Window {
     public Window() throws Exception {
-        ServerRequest requestInfo = new ServerRequest("https://3d99-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
-//        publicPrivate theKey = new publicPrivate();
+        ServerRequest requestInfo = new ServerRequest("https://351e-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
+
         //FRAME
         JFrame newFrame = new JFrame("Welcome to the Gold Card Money Transferring System");
         newFrame.setSize(900, 600);
@@ -17,19 +17,13 @@ public class Window {
         newFrame.setDefaultCloseOperation(3);
 
 
-        JFrame amountFrame = new JFrame("User: " + "requestInfo.getUserFromKey(publicKey)");
+        JFrame amountFrame = new JFrame("User: " + requestInfo.getUserFromName(requestInfo.name));
 
          //BUTTON
         JButton sendButton = new JButton("Transfer Funds");
-        JButton userButton = new JButton("Find User");
+        JButton userButton = new JButton(requestInfo.getUserFromName(requestInfo.name));
 
         //TEXT AREA
-        
-        
-        JTextField userName = new JTextField();
-//        String inputUsername = userName.getText();
-//        inputUsername = requestInfo.getUserFromName(requestInfo.name);
-
         JTextArea displayTransactions = new JTextArea();
         displayTransactions.setWrapStyleWord(true);
         displayTransactions.setLineWrap(true);
@@ -41,7 +35,7 @@ public class Window {
         //JLABEL
         JLabel currentBalance = new JLabel("Current Balance:");
 
-        JLabel enterPublicKey = new JLabel("Enter the user's name: "); //finds user based on public key
+        JLabel enterPublicKey = new JLabel("Transfer Money: "); //finds user based on public key
 
         JLabel transactionHistory = new JLabel("Transaction History:");
 
@@ -53,7 +47,7 @@ public class Window {
 
         JTextField displayFunds = new JTextField(); //for the second window
 
-        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + "USER");
+        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + requestInfo.getUserFromName(requestInfo.name));
 
         //PANELS AND GRIDS
         JPanel newPanel = new JPanel();
@@ -63,7 +57,6 @@ public class Window {
         newPanel.add(currentBalance);
         newPanel.add(displayBalance);
         newPanel.add(enterPublicKey);
-        newPanel.add(userName);
         newPanel.add(userButton);
         newPanel.add(transactionHistory);
         newPanel.add(displayTransactions);
@@ -102,12 +95,11 @@ public class Window {
                     System.out.println("info didn't send. check button");
                     }
                 amountFrame.dispose();
+                System.out.println("Money successfully transferred");
                 }
             }
         sendButton.addActionListener(new sendButtonListener());
-
         //makes everything appear on GUI window
         newPanel.revalidate();
     }
 }
-

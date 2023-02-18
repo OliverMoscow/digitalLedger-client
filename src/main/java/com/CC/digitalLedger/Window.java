@@ -23,11 +23,13 @@ public class Window {
 
          //BUTTON
         JButton sendButton = new JButton("Transfer Funds");
-        JButton userButton = new JButton(requestInfo.getUserFromName(requestInfo.name));
+        JButton userButton = new JButton("Find user");
         JButton createButton = new JButton("Create Account");
 
         //TEXT AREA
         JTextField inputUser = new JTextField();
+        JTextField getUsers = new JTextField();
+
         JTextArea displayTransactions = new JTextArea();
         displayTransactions.setWrapStyleWord(true);
         displayTransactions.setLineWrap(true);
@@ -37,7 +39,7 @@ public class Window {
 
         //JLABEL
         JLabel currentBalance = new JLabel("Current Balance:");
-        JLabel enterPublicKey = new JLabel("Transfer Money: "); //finds user based on public key
+        JLabel enterPublicKey = new JLabel("Search user by public key: "); //finds user based on public key
         JLabel transactionHistory = new JLabel("Transaction History:");
         JLabel publicKey = new JLabel("Public Key: ");
         publicKey.setText("<html>"+ requestInfo.publicKey +"</html>");
@@ -49,7 +51,7 @@ public class Window {
         information.setText("<html>"+ "Welcome to the Gold Card money transferring website! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." +"</html>");
 
         JTextField displayFunds = new JTextField(); //for the second window
-        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + requestInfo.getUserFromName(requestInfo.name));
+        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + requestInfo.getUserFromKey(requestInfo.publicKey));
 
         //PANEL
         JPanel newPanel = new JPanel();
@@ -79,12 +81,13 @@ public class Window {
                 newFrame.setVisible(true);
 
                 newFrame.add(newPanel);
-                GridLayout newGrid = new GridLayout(9, 1);
+                GridLayout newGrid = new GridLayout(10, 1);
                 newPanel.setLayout(newGrid);
                 newPanel.add(welcomeUser);
                 newPanel.add(currentBalance);
                 newPanel.add(displayBalance);
                 newPanel.add(enterPublicKey);
+                newPanel.add(getUsers);
                 newPanel.add(userButton);
                 newPanel.add(transactionHistory);
                 newPanel.add(displayTransactions);
@@ -99,6 +102,13 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e){
                 //OPEN NEW WINDOW
+                getUsers.getText();
+                try {
+                requestInfo.getUserFromKey(requestInfo.publicKey);
+                }
+                catch(Exception e3) {
+                    System.out.println("Failed to retrieve user from public key");
+                }
                 amountFrame.setVisible(true);
                 amountFrame.setSize(400, 200);
 
@@ -132,3 +142,4 @@ public class Window {
         newPanel.revalidate();
     }
 }
+

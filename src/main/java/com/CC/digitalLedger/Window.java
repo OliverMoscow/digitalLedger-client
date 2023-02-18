@@ -4,13 +4,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import java.io.*;
-import java.security.NoSuchAlgorithmException;
 
 
 public class Window {
-    public Window() throws IOException, InterruptedException, NoSuchAlgorithmException {
-        ServerRequest requestInfo = new ServerRequest("https://f69d-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
+    public Window() throws Exception {
+        ServerRequest requestInfo = new ServerRequest("https://351e-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
+
         //FRAME
         JFrame newFrame = new JFrame("Welcome to the Gold Card Money Transferring System");
         newFrame.setSize(900, 600);
@@ -18,37 +17,37 @@ public class Window {
         newFrame.setDefaultCloseOperation(3);
 
 
-        JFrame amountFrame = new JFrame("User: " + "requestInfo.getUserFromKey(publicKey)");
+        JFrame amountFrame = new JFrame("User: " + requestInfo.getUserFromName(requestInfo.name));
 
          //BUTTON
         JButton sendButton = new JButton("Transfer Funds");
-        JButton userButton = new JButton("Find User");
+        JButton userButton = new JButton(requestInfo.getUserFromName(requestInfo.name));
 
         //TEXT AREA
-        JTextField publicKeyInsert = new JTextField();
-
         JTextArea displayTransactions = new JTextArea();
         displayTransactions.setWrapStyleWord(true);
         displayTransactions.setLineWrap(true);
         displayTransactions.setText(requestInfo.getLedger());
 
         JTextArea displayBalance = new JTextArea();
-        //displayBalance.setText(requestInfo.getBalance());
+        displayBalance.setText(requestInfo.getBalance(requestInfo.publicKey));
 
         //JLABEL
         JLabel currentBalance = new JLabel("Current Balance:");
 
-        JLabel enterPublicKey = new JLabel("Enter the user account number: "); //finds user based on public key
+        JLabel enterPublicKey = new JLabel("Transfer Money: "); //finds user based on public key
 
         JLabel transactionHistory = new JLabel("Transaction History:");
 
-        ServerRequest sr = new ServerRequest("https://e2ab-192-70-253-79.ngrok.io");
-        //FIX THIS GUI LATER
-        JLabel keys = new JLabel("                       Public Key: " + sr.publicKey + "                                     Private Key: " + sr.privateKey);
+        JLabel publicKey = new JLabel("Public Key: ");
+        publicKey.setText("<html>"+ requestInfo.publicKey +"</html>");
+
+        JLabel privateKey = new JLabel("Private Key: ");
+        privateKey.setText("<html>"+ requestInfo.privateKey +"</html>");
 
         JTextField displayFunds = new JTextField(); //for the second window
 
-        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + "USER");
+        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + requestInfo.getUserFromName(requestInfo.name));
 
         //PANELS AND GRIDS
         JPanel newPanel = new JPanel();
@@ -58,11 +57,11 @@ public class Window {
         newPanel.add(currentBalance);
         newPanel.add(displayBalance);
         newPanel.add(enterPublicKey);
-        newPanel.add(publicKeyInsert);
         newPanel.add(userButton);
         newPanel.add(transactionHistory);
         newPanel.add(displayTransactions);
-        newPanel.add(keys);
+        newPanel.add(publicKey);
+        newPanel.add(privateKey);
 
 
         class userButtonListener implements ActionListener {
@@ -96,13 +95,12 @@ public class Window {
                 catch(Exception e1) {
                     System.out.println("info didn't send. check button");
                     }
-               amountFrame.dispose();
+                amountFrame.dispose();
+                System.out.println("Money successfully transferred");
                 }
             }
         sendButton.addActionListener(new sendButtonListener());
-
         //makes everything appear on GUI window
         newPanel.revalidate();
     }
 }
-

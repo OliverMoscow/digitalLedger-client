@@ -12,6 +12,7 @@ import java.net.http.HttpResponse;
 import java.security.*;
 import java.util.Base64;
 
+
 //runs on http://127.0.0.1 or localhost, which means your own computer
 public class ServerRequest {
     public String domain;
@@ -19,14 +20,15 @@ public class ServerRequest {
     public PublicKey publicKey = keyPair.getPublic();
     public PrivateKey privateKey = keyPair.getPrivate();
 
+    public String name;
+
+
     public Base64.Encoder encoder = Base64.getEncoder();
+
 
     public ServerRequest(String domain) throws NoSuchAlgorithmException {
         this.domain = domain;
-
     }
-
-    //private key in a file somewhere
 
     //A get request with an endpoint. Make sure there is NO "/" at the beginning of endpoint.
     private String getRequest(String endpoint) throws IOException, InterruptedException {
@@ -40,31 +42,33 @@ public class ServerRequest {
         return response.body();
     }
 
+
     public String getLedger() throws IOException, InterruptedException {
         return getRequest("ledger");
     }
-
-//    public String getTransactions(String publicKey) throws IOException, InterruptedException {
-//        return getRequest("transactions/" + publicKey);
-//    }
 
     public String getBalance(PublicKey publicKey) throws IOException, InterruptedException {
         String publicKeyStr = encoder.encodeToString(publicKey.getEncoded());
         return getRequest("balance/" + publicKeyStr);
     } //USER INFO for public key and name
 
+
     public String getUsers() throws IOException, InterruptedException { //returns every single user
         return getRequest("users");
     }
+
 
     public String getUserFromKey(PublicKey publicKey) throws IOException, InterruptedException { //pick this one or next one
         String publicKeyStr = encoder.encodeToString(publicKey.getEncoded());
         return getRequest("users/" + publicKeyStr);
     }
 
+
     public String getUserFromName(String name) throws IOException, InterruptedException {
         return getRequest("users/" + name);
     }
+
+
 
     //POST REQUESTS
     public String send() throws IOException, InterruptedException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
@@ -86,9 +90,6 @@ public class ServerRequest {
                 //INCOMPLETE: Set headers for post request. See google doc. https://www.baeldung.com/java-9-http-client.
                 .uri(URI.create(domain + "/send"))
                 .build();
-
-
-
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
     }
@@ -105,25 +106,5 @@ public class ServerRequest {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
-    }
-
-    /*
-    public String sendEncryptedMessage(String message) throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.ENCRYPT_MODE, privateKey);
-        byte[] encryptedBytes = cipher.doFinal(message.getBytes());
-        String encryptedMessage = new String(encryptedBytes);
-        return encryptedMessage;
-    }
-
-    */
-
-
-
-    public static void main(String[] args) throws IOException, InterruptedException, NoSuchAlgorithmException {
-        //Initialize server with a running ngrok port. Make sure there is NO "/" at the end ;)
-        ServerRequest server = new ServerRequest("https://e2ab-192-70-253-79.ngrok.io");
-        //System.out.println(server.getLedger());
-
     }
 }

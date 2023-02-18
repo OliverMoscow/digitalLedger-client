@@ -90,7 +90,8 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e){
                 try {
-                    requestInfo.send();
+                    requestInfo.send(); // this needs to be updated
+
                 }
                 catch(Exception e1) {
                     System.out.println("info didn't send. check button");

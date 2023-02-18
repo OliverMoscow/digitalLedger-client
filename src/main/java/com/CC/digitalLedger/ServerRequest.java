@@ -1,5 +1,9 @@
 package com.CC.digitalLedger;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -63,21 +67,36 @@ public class ServerRequest {
     }
 
     //POST REQUESTS
-    public String send() throws IOException, InterruptedException {
+    public String send() throws IOException, InterruptedException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+
         HttpClient client = HttpClient.newHttpClient();
+        String message = "You successfully sent " + "to ";
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+        byte[] encryptedBytes = cipher.doFinal(message.getBytes());
+        String encryptedMessage = new String(encryptedBytes);
+
+        String publicKeyStr = encoder.encodeToString(publicKey.getEncoded());
+
+        String req = String.format("{name: %s, publicKey: %2s", publicKeyStr, encryptedMessage);
+
         HttpRequest request = HttpRequest.newBuilder()
-                .GET()
+                .POST(HttpRequest.BodyPublishers.ofString(req))
                 .header("accept", "application/json")
                 //INCOMPLETE: Set headers for post request. See google doc. https://www.baeldung.com/java-9-http-client.
-                .headers("key1", "value1", "key2", "value2")
                 .uri(URI.create(domain + "/send"))
                 .build();
+
+
+
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
     }
 
-    public String newUser(String name, String publicKey) throws IOException, InterruptedException {
-        String req = String.format("{name: %s, publicKey: %2s", name, publicKey);
+    public String newUser(String name, PublicKey publicKey) throws IOException, InterruptedException {
+        String publicKeyStr = encoder.encodeToString(publicKey.getEncoded());
+
+        String req = String.format("{name: %s, publicKey: %2s", name, publicKeyStr);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(req))
@@ -88,15 +107,23 @@ public class ServerRequest {
         return response.body();
     }
 
+    /*
+    public String sendEncryptedMessage(String message) throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException {
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+        byte[] encryptedBytes = cipher.doFinal(message.getBytes());
+        String encryptedMessage = new String(encryptedBytes);
+        return encryptedMessage;
+    }
 
-
-
+    */
 
 
 
     public static void main(String[] args) throws IOException, InterruptedException, NoSuchAlgorithmException {
         //Initialize server with a running ngrok port. Make sure there is NO "/" at the end ;)
         ServerRequest server = new ServerRequest("https://e2ab-192-70-253-79.ngrok.io");
-        System.out.println(server.getLedger());
+        //System.out.println(server.getLedger());
+
     }
 }

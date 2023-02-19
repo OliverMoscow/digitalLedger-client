@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public class Window {
     public Window() throws Exception {
-        ServerRequest server = new ServerRequest("https://3267-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
+        ServerRequest requestInfo = new ServerRequest("https://7e65-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
 
         //FRAME
         JFrame createFrame = new JFrame("Generation Page");
@@ -18,8 +18,6 @@ public class Window {
 
         JFrame newFrame = new JFrame("Gold Card Money Transferring System");
         newFrame.setDefaultCloseOperation(3);
-
-        JFrame amountFrame = new JFrame("User: " + server.currentUser());
 
          //BUTTON
         JButton sendButton = new JButton("Transfer Funds");
@@ -33,25 +31,25 @@ public class Window {
         JTextArea displayTransactions = new JTextArea();
         displayTransactions.setWrapStyleWord(true);
         displayTransactions.setLineWrap(true);
-        displayTransactions.setText(server.getLedger());
+        displayTransactions.setText(requestInfo.getLedger());
         JTextArea displayBalance = new JTextArea();
-        displayBalance.setText(server.getBalance());
+        displayBalance.setText(requestInfo.getBalance(requestInfo.publicKey));
 
         //JLABEL
         JLabel currentBalance = new JLabel("Current Balance:");
-        JLabel enterPublicKey = new JLabel("Search user by public key: "); //finds user based on public key
+        JLabel enterPublicKey = new JLabel("Search user by public key or name: "); //finds user based on public key or name
         JLabel transactionHistory = new JLabel("Transaction History:");
         JLabel publicKey = new JLabel("Public Key: ");
-        publicKey.setText("<html>"+ server.secret.publicKeyAsString() +"</html>");
+        publicKey.setText("<html>"+ requestInfo.publicKey +"</html>");
         JLabel privateKey = new JLabel("Private Key: ");
-        privateKey.setText("<html>"+ server.secret.privateKeyAsString() +"</html>");
+        privateKey.setText("<html>"+ requestInfo.privateKey +"</html>");
         JLabel createUser = new JLabel("Input your name: ");
-        JLabel welcomeUser = new JLabel("Welcome to the Gold Card Money Transferring System, " + server.instantiateUser(inputUser.getText()));
+        JLabel welcomeUser = new JLabel("Welcome to the Gold Card Money Transferring System, " + requestInfo.newUser(inputUser.getText(), requestInfo.publicKey));
         JLabel information = new JLabel();
         information.setText("<html>"+ "Welcome to the Gold Card money transferring website! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." +"</html>");
 
         JTextField displayFunds = new JTextField(); //for the second window
-        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + server.currentUser());
+        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + requestInfo.getUserFromKey(requestInfo.publicKey));
 
         //PANEL
         JPanel newPanel = new JPanel();
@@ -72,7 +70,7 @@ public class Window {
                 //open new window
                 inputUser.getText(); //Name is already on server
                 try {
-                    server.instantiateUser(inputUser.getText());
+                    requestInfo.newUser(inputUser.getText(), requestInfo.publicKey);
                 }
                 catch(Exception e2) {
                     System.out.println("Failed to retrieve user info");
@@ -98,20 +96,23 @@ public class Window {
         }
         createButton.addActionListener(new createButtonListener());
 
+        JFrame amountFrame = new JFrame("User: " + requestInfo.getUserFromName(requestInfo.name));
         class userButtonListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e){
                 //OPEN NEW WINDOW
                 getUsers.getText();
                 try {
-                server.currentUser();
+                requestInfo.getUserFromKey(requestInfo.publicKey);
+                requestInfo.getUserFromName(requestInfo.name);
                 }
                 catch(Exception e3) {
-                    System.out.println("Failed to retrieve user from public key");
+                    System.out.println("Failed to retrieve user from public key or name. Please try again");
                 }
                 amountFrame.setVisible(true);
                 amountFrame.setSize(400, 200);
 
+                //make sure this specific window is with that specific user
                 JPanel amountPanel = new JPanel();
                 amountFrame.add(amountPanel);
 
@@ -128,7 +129,7 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e){
                 try {
-                    server.send();
+                    requestInfo.send();
                 }
                 catch(Exception e1) {
                     System.out.println("info didn't send. check button");

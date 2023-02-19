@@ -49,7 +49,7 @@ public class Window {
         information.setText("<html>"+ "Welcome to the Gold Card money transferring website! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." +"</html>");
 
         JTextField displayFunds = new JTextField(); //for the second window
-        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + server.currentUser();
+        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + server.currentUser());
 
         //PANEL
         JPanel newPanel = new JPanel();

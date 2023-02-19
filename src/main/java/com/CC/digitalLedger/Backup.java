@@ -3,6 +3,7 @@ package com.CC.digitalLedger;
 import java.io.*;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Scanner;
@@ -64,14 +65,15 @@ class Secret {
 
     public static PrivateKey stringToPrivate(String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] privateBytes = Base64.getDecoder().decode(privateKey) ;
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(privateBytes);
+        PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(privateBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        return keyFactory.generatePrivate(keySpec);
+        return keyFactory.generatePrivate(pkcs8KeySpec);
     }
 
     public static PublicKey stringToPublic(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] publicBytes = Base64.getDecoder().decode(publicKey) ;
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicBytes);
+
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         return keyFactory.generatePublic(keySpec);
     }

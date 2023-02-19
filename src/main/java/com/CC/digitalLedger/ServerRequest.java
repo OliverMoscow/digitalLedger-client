@@ -10,24 +10,22 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
 
 //runs on http://127.0.0.1 or localhost, which means your own computer
 public class ServerRequest {
     public String domain;
-    public KeyPair keyPair = KeyPairGenerator.getInstance("RSA").generateKeyPair();
-    public PublicKey publicKey = keyPair.getPublic();
-    public PrivateKey privateKey = keyPair.getPrivate();
-
-    public String name;
+    public Secret secret;
 
 
     public Base64.Encoder encoder = Base64.getEncoder();
 
 
-    public ServerRequest(String domain) throws NoSuchAlgorithmException {
+    public ServerRequest(String domain) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
         this.domain = domain;
+        this.secret = Backup.load();
     }
 
     //A get request with an endpoint. Make sure there is NO "/" at the beginning of endpoint.
@@ -47,9 +45,8 @@ public class ServerRequest {
         return getRequest("ledger");
     }
 
-    public String getBalance(PublicKey publicKey) throws IOException, InterruptedException {
-        String publicKeyStr = encoder.encodeToString(publicKey.getEncoded());
-        return getRequest("balance/" + publicKeyStr);
+    public String getBalance() throws IOException, InterruptedException {
+        return getRequest("balance/" + secret.publicKeyAsString());
     } //USER INFO for public key and name
 
 
@@ -58,9 +55,8 @@ public class ServerRequest {
     }
 
 
-    public String getUserFromKey(PublicKey publicKey) throws IOException, InterruptedException { //pick this one or next one
-        String publicKeyStr = encoder.encodeToString(publicKey.getEncoded());
-        return getRequest("users/" + publicKeyStr);
+    public String currentUser() throws IOException, InterruptedException { //pick this one or next one
+        return getRequest("users/" + secret.publicKeyAsString());
     }
 
 
@@ -76,13 +72,11 @@ public class ServerRequest {
         HttpClient client = HttpClient.newHttpClient();
         String message = "You successfully sent " + "to ";
         Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+        cipher.init(Cipher.ENCRYPT_MODE, secret.privateKey());
         byte[] encryptedBytes = cipher.doFinal(message.getBytes());
         String encryptedMessage = new String(encryptedBytes);
 
-        String publicKeyStr = encoder.encodeToString(publicKey.getEncoded());
-
-        String req = String.format("{name: %s, publicKey: %2s", publicKeyStr, encryptedMessage);
+        String req = String.format("{name: %s, publicKey: %2s", secret.publicKeyAsString(), encryptedMessage);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(req))
@@ -94,10 +88,8 @@ public class ServerRequest {
         return response.body();
     }
 
-    public String newUser(String name, PublicKey publicKey) throws IOException, InterruptedException {
-        String publicKeyStr = encoder.encodeToString(publicKey.getEncoded());
-
-        String req = String.format("{name: %s, publicKey: %2s", name, publicKeyStr);
+    public String instantiateUser(String name) throws IOException, InterruptedException {
+        String req = String.format("{name: %s, publicKey: %2s", name, secret.publicKeyAsString());
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(req))

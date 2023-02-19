@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public class Window {
     public Window() throws Exception {
-        ServerRequest requestInfo = new ServerRequest("https://3267-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
+        ServerRequest server = new ServerRequest("https://3267-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
 
         //FRAME
         JFrame createFrame = new JFrame("Generation Page");
@@ -19,7 +19,7 @@ public class Window {
         JFrame newFrame = new JFrame("Gold Card Money Transferring System");
         newFrame.setDefaultCloseOperation(3);
 
-        JFrame amountFrame = new JFrame("User: " + requestInfo.getUserFromName(requestInfo.name));
+        JFrame amountFrame = new JFrame("User: " + server.currentUser());
 
          //BUTTON
         JButton sendButton = new JButton("Transfer Funds");
@@ -33,25 +33,25 @@ public class Window {
         JTextArea displayTransactions = new JTextArea();
         displayTransactions.setWrapStyleWord(true);
         displayTransactions.setLineWrap(true);
-        displayTransactions.setText(requestInfo.getLedger());
+        displayTransactions.setText(server.getLedger());
         JTextArea displayBalance = new JTextArea();
-        displayBalance.setText(requestInfo.getBalance(requestInfo.publicKey));
+        displayBalance.setText(server.getBalance());
 
         //JLABEL
         JLabel currentBalance = new JLabel("Current Balance:");
         JLabel enterPublicKey = new JLabel("Search user by public key: "); //finds user based on public key
         JLabel transactionHistory = new JLabel("Transaction History:");
         JLabel publicKey = new JLabel("Public Key: ");
-        publicKey.setText("<html>"+ requestInfo.publicKey +"</html>");
+        publicKey.setText("<html>"+ server.secret.publicKeyAsString() +"</html>");
         JLabel privateKey = new JLabel("Private Key: ");
-        privateKey.setText("<html>"+ requestInfo.privateKey +"</html>");
+        privateKey.setText("<html>"+ server.secret.privateKeyAsString() +"</html>");
         JLabel createUser = new JLabel("Input your name: ");
-        JLabel welcomeUser = new JLabel("Welcome to the Gold Card Money Transferring System, " + requestInfo.newUser(inputUser.getText(), requestInfo.publicKey));
+        JLabel welcomeUser = new JLabel("Welcome to the Gold Card Money Transferring System, " + server.instantiateUser(inputUser.getText()));
         JLabel information = new JLabel();
         information.setText("<html>"+ "Welcome to the Gold Card money transferring website! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." +"</html>");
 
         JTextField displayFunds = new JTextField(); //for the second window
-        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + requestInfo.getUserFromKey(requestInfo.publicKey));
+        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + server.currentUser());
 
         //PANEL
         JPanel newPanel = new JPanel();
@@ -72,7 +72,7 @@ public class Window {
                 //open new window
                 inputUser.getText(); //Name is already on server
                 try {
-                    requestInfo.newUser(inputUser.getText(), requestInfo.publicKey);
+                    server.instantiateUser(inputUser.getText());
                 }
                 catch(Exception e2) {
                     System.out.println("Failed to retrieve user info");
@@ -104,7 +104,7 @@ public class Window {
                 //OPEN NEW WINDOW
                 getUsers.getText();
                 try {
-                requestInfo.getUserFromKey(requestInfo.publicKey);
+                server.currentUser();
                 }
                 catch(Exception e3) {
                     System.out.println("Failed to retrieve user from public key");
@@ -128,7 +128,7 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e){
                 try {
-                    requestInfo.send();
+                    server.send();
                 }
                 catch(Exception e1) {
                     System.out.println("info didn't send. check button");

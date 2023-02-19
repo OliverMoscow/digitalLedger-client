@@ -14,7 +14,7 @@ public class Backup {
         File f = new File("secret.txt");
         if(f.createNewFile()) {
             Secret s = new Secret();
-            save(s);
+            save(s, f);
             return s;
         } else {
             return read();
@@ -24,15 +24,22 @@ public class Backup {
     private static Secret read() throws FileNotFoundException, NoSuchAlgorithmException, InvalidKeySpecException {
         File f = new File("secret.txt");
         Scanner reader = new Scanner(f);
+        reader.nextLine();
         String publicKey = reader.nextLine();
+        reader.nextLine();
         String privateKey = reader.nextLine();
         return new Secret(publicKey,privateKey);
     }
 
-    private static void save(Secret s) throws IOException {
-        FileWriter writer = new FileWriter("secret.txt");
-        writer.write(s.publicKeyAsString());
-        writer.write(s.privateKeyAsString());
+    private static void save(Secret s, File f) throws IOException {
+        PrintStream fileStream = new PrintStream(f);
+        fileStream.println("### PUBLIC KEY ###");
+        fileStream.println(s.publicKeyAsString());
+        fileStream.println("### PRIVATE KEY ###");
+        fileStream.println(s.privateKeyAsString());
+        fileStream.println("");
+        fileStream.println("DO NOT DELETE THIS FILE!!");
+        fileStream.println("This file stores your private and public key which are required to retrieve your funds in the ledger. You should probably back this up somewhere.");
     }
 }
 

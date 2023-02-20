@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.*;
 
-
 public class Window {
     public Window() throws Exception {
         //GENERATION PAGE
@@ -52,6 +51,7 @@ public class Window {
                     }catch (Exception e4){
                         System.out.println("Gui didn't work");
                     }
+                    createFrame.setVisible(false);
                 }
             }
             createButton.addActionListener(new createButtonListener());
@@ -72,14 +72,14 @@ public class Window {
         displayTransactions.setWrapStyleWord(true);
         displayTransactions.setLineWrap(true);
         displayTransactions.setText(server.getLedger());
+
         JTextArea displayBalance = new JTextArea();
         displayBalance.setText(server.getBalance());
+
         JButton userButton = new JButton("Find user");
+
         JLabel currentBalance = new JLabel("Current Balance:");
         JLabel enterPublicKey = new JLabel("Search user by name: "); //finds user based on public key or name
-        //NEED TO STORE THE USER YOU SEARCHED
-
-
         JLabel transactionHistory = new JLabel("Transaction History:");
         JLabel publicKey = new JLabel("Public Key: ");
         publicKey.setText("<html>" + server.secret.publicKeyAsString() + "</html>");
@@ -104,7 +104,6 @@ public class Window {
         newPanel.add(publicKey);
         newPanel.add(privateKey);
         newPanel.revalidate();
-        //createFrame.setVisible(false);
 
         JFrame amountFrame = new JFrame("User: " + server.currentUser());
         JButton sendButton = new JButton("Transfer Funds");
@@ -112,21 +111,17 @@ public class Window {
         class userButtonListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //OPEN NEW WINDOW
-                getUsers.getText();
                 try {
                     server.getUserFromName(getUsers.getText());
                 } catch (Exception e3) {
-                    System.out.println("Failed to retrieve user name. Please try again");
+                    System.out.println("Failed to retrieve user. Account probably doesn't exist");
                 }
                 amountFrame.setVisible(true);
                 amountFrame.setSize(400, 200);
-
-                //make sure this specific window is with that specific user
                 JPanel amountPanel = new JPanel();
                 amountFrame.add(amountPanel);
                 JTextField displayFunds = new JTextField(); //for the second window
-                JLabel newWindowLabel = new JLabel("                                                  Enter amount: ");
+                JLabel newWindowLabel = new JLabel("Enter amount: ");
 
                 GridLayout grid = new GridLayout(3, 1);
                 amountPanel.setLayout(grid);
@@ -154,28 +149,4 @@ public class Window {
     }
 }
 
-
-//
-//        if (Backup.isInitialized() == true){
-//            createFrame.setVisible(false);
-//            newFrame.setSize(900, 600);
-//            newFrame.setVisible(true);
-//
-//            newFrame.add(newPanel);
-//            GridLayout newGrid = new GridLayout(10, 1);
-//            newPanel.setLayout(newGrid);
-//            newPanel.add(welcomeUser);
-//            newPanel.add(currentBalance);
-//            newPanel.add(displayBalance);
-//            newPanel.add(enterPublicKey);
-//            newPanel.add(getUsers);
-//            newPanel.add(userButton);
-//            newPanel.add(transactionHistory);
-//            newPanel.add(displayTransactions);
-//            newPanel.add(publicKey);
-//            newPanel.add(privateKey);
-//        }
-//    }
-//
-//}
 

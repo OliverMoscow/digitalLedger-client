@@ -11,9 +11,11 @@ import java.util.Scanner;
 //Not related to any api/db functionality
 public class Backup {
 
+
     public static boolean isInitialized() {
         File f = new File("secret.txt");
-        return (f.exists() && f.isDirectory());
+        boolean fileExist = f.exists();
+        return (fileExist);
     }
 
 
@@ -38,7 +40,7 @@ public class Backup {
         return new Secret(publicKey,privateKey);
     }
 
-    private static void save(Secret s, File f) throws IOException {
+    public static void save(Secret s, File f) throws IOException {
         PrintStream fileStream = new PrintStream(f);
         fileStream.println("### PUBLIC KEY ###");
         fileStream.println(s.publicKeyAsString());

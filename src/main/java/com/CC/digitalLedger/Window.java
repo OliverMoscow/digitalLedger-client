@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public class Window {
     public Window() throws Exception {
-        ServerRequest server = new ServerRequest("https://7e65-192-70-253-78.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
+        ServerRequest server = new ServerRequest("https://c956-192-70-253-79.ngrok.io"); //https://e2ab-192-70-253-79.ngrok.io
 
         //FRAME
         JFrame createFrame = new JFrame("Generation Page");
@@ -37,7 +37,7 @@ public class Window {
 
         //JLABEL
         JLabel currentBalance = new JLabel("Current Balance:");
-        JLabel enterPublicKey = new JLabel("Search user by public key or name: "); //finds user based on public key or name
+        JLabel enterPublicKey = new JLabel("Search user by name: "); //finds user based on public key or name
         JLabel transactionHistory = new JLabel("Transaction History:");
         JLabel publicKey = new JLabel("Public Key: ");
         publicKey.setText("<html>"+ server.secret.publicKeyAsString() +"</html>");
@@ -49,7 +49,7 @@ public class Window {
         information.setText("<html>"+ "Welcome to the Gold Card money transferring website! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." +"</html>");
 
         JTextField displayFunds = new JTextField(); //for the second window
-        JLabel newWindowLabel = new JLabel("              Enter amount to transfer to " + server.currentUser());
+        JLabel newWindowLabel = new JLabel("                                                  Enter amount: ");
 
         //PANEL
         JPanel newPanel = new JPanel();
@@ -103,10 +103,10 @@ public class Window {
                 //OPEN NEW WINDOW
                 getUsers.getText();
                 try {
-                server.currentUser();
+                    server.getUserFromName(getUsers.getText());
                 }
                 catch(Exception e3) {
-                    System.out.println("Failed to retrieve user from public key or name. Please try again");
+                    System.out.println("Failed to retrieve user name. Please try again");
                 }
                 amountFrame.setVisible(true);
                 amountFrame.setSize(400, 200);

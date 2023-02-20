@@ -39,3 +39,4 @@ build/
 
 ### APPLICATION SPECIFIC ###
 secret.txt
+.idea

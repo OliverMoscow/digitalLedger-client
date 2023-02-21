@@ -10,40 +10,53 @@ import java.util.Scanner;
 
 //Not related to any api/db functionality
 public class Backup {
-    public static boolean isInitialized() {
-        File f = new File("secret.txt");
-        boolean fileExist = f.exists();
-        return (fileExist);
+    public Secret secret = null;
+    public String name = null;
+    public boolean isInitialized = false;
+
+    public Backup() {
+        try {
+            this.secret = load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static Secret load() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public Secret load() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         File f = new File("secret.txt");
         if(f.createNewFile()) {
             Secret s = new Secret();
-            String name = new String();
-            save(s, f, name);
             return s;
         } else {
+            this.isInitialized = true;
             return read();
         }
     }
 
-    private static Secret read() throws FileNotFoundException, NoSuchAlgorithmException, InvalidKeySpecException {
+    private Secret read() throws FileNotFoundException, NoSuchAlgorithmException, InvalidKeySpecException {
         File f = new File("secret.txt");
         Scanner reader = new Scanner(f);
         reader.nextLine();
         String publicKey = reader.nextLine();
         reader.nextLine();
         String privateKey = reader.nextLine();
+        reader.nextLine();
+        name = reader.nextLine();
         return new Secret(publicKey,privateKey);
     }
 
-    public static void save(Secret s, File f, String name) throws IOException {
-        PrintStream fileStream = new PrintStream(f);
+    public void save(String name) throws IOException {
+        this.name = name;
+        PrintStream fileStream = new PrintStream(new File("secret.txt"));
         fileStream.println("### PUBLIC KEY ###");
-        fileStream.println(s.publicKeyAsString());
+        fileStream.println(secret.publicKeyAsString());
         fileStream.println("### PRIVATE KEY ###");
-        fileStream.println(s.privateKeyAsString());
+        fileStream.println(secret.privateKeyAsString());
+        fileStream.println("### USERNAME ###");
         fileStream.println(name);
         fileStream.println("");
         fileStream.println("DO NOT DELETE THIS FILE!!");
@@ -99,5 +112,4 @@ class Secret {
         Base64.Encoder encoder = Base64.getEncoder();
         return encoder.encodeToString(privateKey.getEncoded());
     }
-
 }

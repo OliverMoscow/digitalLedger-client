@@ -8,12 +8,13 @@ import javax.swing.*;
 
 public class Window {
     JTextField inputUser = new JTextField();
+    Backup backup;
+    ServerRequest server;
 
     public Window() throws Exception {
-
+        backup = new Backup();
         //GENERATION PAGE
-        if (Backup.isInitialized() == false) {
-            Secret newSecret = new Secret(); //runs constructor for secret
+        if (backup.isInitialized == false) {
             File f = new File("secret.txt");
 
             //GENERATE USER PAGE
@@ -41,10 +42,9 @@ public class Window {
                     //open new window
                     //inputUser.getText(); //Name is already on server
                     try {
-                        ServerRequest server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io");
-                        server.instantiateUser(inputUser.getText());
-                        Backup.save(newSecret, f,inputUser.getText());
-                        Backup.load();
+                        backup.save(inputUser.getText());
+                        ServerRequest server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io", backup);
+                        server.instantiateUser();
                     } catch (Exception e2) {
                         System.out.println("Failed to retrieve user info");
                     }
@@ -64,7 +64,9 @@ public class Window {
         }
     }
     void createMainGUI() throws Exception{
-        ServerRequest server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io");
+        if(server == null) {
+            server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io", backup);
+        }
         JFrame newFrame = new JFrame("Gold Card Money Transferring System");
         newFrame.setDefaultCloseOperation(3);
         JPanel newPanel = new JPanel();

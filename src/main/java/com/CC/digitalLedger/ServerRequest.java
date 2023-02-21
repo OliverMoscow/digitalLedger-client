@@ -18,14 +18,15 @@ import java.util.Base64;
 public class ServerRequest {
     public String domain;
     public Secret secret;
-
+    public String username;
 
     public Base64.Encoder encoder = Base64.getEncoder();
 
 
-    public ServerRequest(String domain) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+    public ServerRequest(String domain, Backup backup) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
         this.domain = domain;
-        this.secret = Backup.load();
+        this.secret = backup.secret;
+        this.username = backup.name;
     }
 
     //A get request with an endpoint. Make sure there is NO "/" at the beginning of endpoint.
@@ -82,8 +83,12 @@ public class ServerRequest {
         byte[] encryptedBytes = cipher.doFinal(message.getBytes());
         String encryptedMessage = Base64.getEncoder().encodeToString(encryptedBytes);
 
+        if (username == "") {
+            return null;
+        }
+
         // Create request
-        String req = String.format("{\"sender\": \"%s\", \"encrypted\": \"%s\"}", secret.publicKeyAsString(), encryptedMessage);
+        String req = String.format("{\"sender\": \"%s\",\"senderName\": \"%s\" \"encrypted\": \"%s\"}", secret.publicKeyAsString(),username, encryptedMessage);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(domain + "/send"))
                 .header("Content-Type", "application/json")
@@ -96,8 +101,8 @@ public class ServerRequest {
         return response.body();
     }
 
-    public String instantiateUser(String name) throws IOException, InterruptedException {
-        String req = String.format("{\"name\": \"%s\", \"publicKey\": \"%2s\"}", name, secret.publicKeyAsString());
+    public String instantiateUser() throws IOException, InterruptedException {
+        String req = String.format("{\"name\": \"%s\", \"publicKey\": \"%2s\"}", username, secret.publicKeyAsString());
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(req))

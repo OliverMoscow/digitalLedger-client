@@ -39,7 +39,7 @@ public class Window {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     //open new window
-                    inputUser.getText(); //Name is already on server
+                    //inputUser.getText(); //Name is already on server
                     try {
                         ServerRequest server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io");
                         server.instantiateUser(inputUser.getText());
@@ -76,7 +76,7 @@ public class Window {
         displayTransactions.setText(server.getLedger());
 
         JTextArea displayBalance = new JTextArea();
-        displayBalance.setText(server.getBalance());
+        displayBalance.setText(server.getBalance(inputUser.getText()));
 
         JButton userButton = new JButton("Find user");
 
@@ -144,12 +144,11 @@ public class Window {
         }
         userButton.addActionListener(new userButtonListener());
 
-
         class sendButtonListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-//                    server.send(displayFunds.getText(), getUsers.getText());
+                    server.send(Double.valueOf(displayFunds.getText()), getUsers.getText());
                 } catch (Exception e1) {
                     System.out.println("Send() doesn't work");
                 }

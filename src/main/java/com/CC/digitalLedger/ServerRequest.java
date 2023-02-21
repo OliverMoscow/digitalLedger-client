@@ -45,7 +45,7 @@ public class ServerRequest {
         return getRequest("ledger");
     }
 
-    public String getBalance() throws IOException, InterruptedException {
+    public String getBalance(String name) throws IOException, InterruptedException {
         return getRequest("balance/" + secret.publicKeyAsString());
     } //USER INFO for public key and name
 
@@ -109,8 +109,8 @@ public class ServerRequest {
         return response.body();
     }
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InterruptedException {
-        ServerRequest server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io");
-        server.send(100.00, "Vincent");
-    }
+//    public static void main(String[] args) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InterruptedException {
+//        ServerRequest server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io");
+//        server.send(100.00, "Vincent");
+//    }
 }

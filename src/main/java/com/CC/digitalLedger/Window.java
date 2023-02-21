@@ -80,6 +80,8 @@ public class Window {
 
         JButton userButton = new JButton("Find user");
 
+        JButton refreshBalance = new JButton("Refresh Balance");
+
         JLabel currentBalance = new JLabel("Current Balance:");
         JLabel enterPublicKey = new JLabel("Search user by name: "); //finds user based on public key or name
         JLabel transactionHistory = new JLabel("Transaction History:");
@@ -95,9 +97,10 @@ public class Window {
         newFrame.setVisible(true);
 
         newFrame.add(newPanel);
-        GridLayout newGrid = new GridLayout(10, 1);
+        GridLayout newGrid = new GridLayout(11, 1);
         newPanel.setLayout(newGrid);
         newPanel.add(welcomeUser);
+        newPanel.add(refreshBalance);
         newPanel.add(currentBalance);
         newPanel.add(displayBalance);
         newPanel.add(enterPublicKey);
@@ -155,6 +158,19 @@ public class Window {
             }
         }
         sendButton.addActionListener(new sendButtonListener());
+
+        class refreshButtonListener implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newFrame.dispose();
+                try {
+                    createMainGUI();
+                }catch(Exception e7){
+                        System.out.println("You can't do this");
+                    }
+            }
+        }
+        refreshBalance.addActionListener(new refreshButtonListener());
     }
 }
 

@@ -10,6 +10,7 @@ public class Window {
     JTextField inputUser = new JTextField();
 
     public Window() throws Exception {
+
         //GENERATION PAGE
         if (Backup.isInitialized() == false) {
             Secret newSecret = new Secret(); //runs constructor for secret
@@ -144,9 +145,9 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    server.send();
+                    server.send(getUsers.getText());
                 } catch (Exception e1) {
-                    System.out.println("info didn't send. check button");
+                    System.out.println("Send() doesn't work");
                 }
                 amountFrame.dispose();
             }

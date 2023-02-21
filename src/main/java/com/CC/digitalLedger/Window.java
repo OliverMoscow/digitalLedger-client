@@ -129,8 +129,11 @@ public class Window {
                 amountFrame.add(amountPanel);
                 JLabel newWindowLabel = new JLabel("Enter amount: ");
                 JLabel otherUser = new JLabel();
-                otherUser.setText("User: " + getUsers.getText());
-
+                try {
+                otherUser.setText("User: " + server.getUserFromName(getUsers.getText()));
+                } catch (Exception e3) {
+                    System.out.println("server.getUserFromName(getUsers.getText()) failed");
+                }
                 GridLayout grid = new GridLayout(4, 1);
                 amountPanel.setLayout(grid);
                 amountPanel.add(otherUser);

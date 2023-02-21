@@ -64,8 +64,6 @@ public class ServerRequest {
         return getRequest("users/name/" + name);
     }
 
-
-
     //POST REQUESTS
     public String send(String amount, String receiver) throws IOException, InterruptedException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
@@ -73,7 +71,7 @@ public class ServerRequest {
         HttpClient client = HttpClient.newHttpClient();
 
         // Create message
-        String message = String.format("{\"receiver\":\"%s\", \"amount\": \"2%f\"}", receiver, amount).replace((char) 4, '\\');
+        String message = String.format("{\"receiver\":\"%s\", \"amount\": \"2%s\"}", receiver, amount).replace((char) 4, '\\');
 
         // Encrypt message
         Cipher cipher = Cipher.getInstance("RSA");

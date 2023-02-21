@@ -39,8 +39,6 @@ public class Window {
             class createButtonListener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    //open new window
-                    //inputUser.getText(); //Name is already on server
                     try {
                         backup.save(inputUser.getText());
                         ServerRequest server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io", backup);
@@ -123,7 +121,6 @@ public class Window {
                     server.getUserFromName(getUsers.getText());
                 } catch (Exception e3) {
                     System.out.println("Failed to retrieve user. Account probably doesn't exist");
-                    //probably need to do a boolean for this like boolean getUser == true, then open window, else Jframe says not true
                 }
                 amountFrame.setVisible(true);
                 amountFrame.setSize(400, 200);

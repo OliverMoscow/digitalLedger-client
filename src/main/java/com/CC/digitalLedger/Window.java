@@ -42,7 +42,7 @@ public class Window {
                     try {
                         backup.save(inputUser.getText());
                         ServerRequest server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io", backup);
-                        server.instantiateUser();
+                        System.out.println(server.instantiateUser());
                     } catch (Exception e2) {
                         System.out.println("Failed to retrieve user info");
                     }
@@ -76,7 +76,7 @@ public class Window {
         displayTransactions.setText(server.getLedger());
 
         JTextArea displayBalance = new JTextArea();
-        displayBalance.setText(server.getBalance(inputUser.getText()));
+        displayBalance.setText(server.getBalance());
 
         JButton userButton = new JButton("Find user");
 
@@ -88,7 +88,7 @@ public class Window {
         JLabel privateKey = new JLabel("Private Key: ");
         privateKey.setText("Private Key: " + server.secret.privateKeyAsString());
         JLabel welcomeUser = new JLabel();
-        welcomeUser.setText("Welcome to the Gold Card Money Transferring System, " + inputUser.getText());
+        welcomeUser.setText("Welcome to the Gold Card Money Transferring System, " + backup.name);
         welcomeUser.setVisible(true);
 
         newFrame.setSize(900, 600);
@@ -147,9 +147,9 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    server.send(Double.valueOf(displayFunds.getText()), getUsers.getText());
+                    System.out.println(server.send(Double.valueOf(displayFunds.getText()), getUsers.getText()));
                 } catch (Exception e1) {
-                    System.out.println("Send() doesn't work");
+                    System.out.println("Transaction did not complete");
                 }
                 amountFrame.dispose();
             }

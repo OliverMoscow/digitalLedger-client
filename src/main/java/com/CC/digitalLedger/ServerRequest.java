@@ -46,8 +46,8 @@ public class ServerRequest {
         return getRequest("ledger");
     }
 
-    public String getBalance(String name) throws IOException, InterruptedException {
-        return getRequest("balance/" + secret.publicKeyAsString());
+    public String getBalance() throws IOException, InterruptedException {
+        return getRequest("balance/" + username);
     } //USER INFO for public key and name
 
 
@@ -88,7 +88,7 @@ public class ServerRequest {
         }
 
         // Create request
-        String req = String.format("{\"sender\": \"%s\",\"senderName\": \"%s\" \"encrypted\": \"%s\"}", secret.publicKeyAsString(),username, encryptedMessage);
+        String req = String.format("{\"sender\": \"%s\",\"senderName\": \"%s\", \"encrypted\": \"%s\"}", secret.publicKeyAsString(),username, encryptedMessage);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(domain + "/send"))
                 .header("Content-Type", "application/json")

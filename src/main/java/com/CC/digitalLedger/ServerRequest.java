@@ -13,13 +13,9 @@ import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
-
-//runs on http://127.0.0.1 or localhost, which means your own computer
 public class ServerRequest {
     public String domain;
     public Secret secret;
-
-
     public Base64.Encoder encoder = Base64.getEncoder();
 
 
@@ -68,8 +64,6 @@ public class ServerRequest {
 
     //POST REQUESTS
     public String send(Double amount, String receiver) throws IOException, InterruptedException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-
-
         // Create HTTP client
         HttpClient client = HttpClient.newHttpClient();
 

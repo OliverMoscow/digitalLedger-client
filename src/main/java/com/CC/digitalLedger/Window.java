@@ -65,7 +65,7 @@ public class Window {
         if(server == null) {
             server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io", backup);
         }
-        JFrame newFrame = new JFrame("Gold Card Money Transferring System");
+        JFrame newFrame = new JFrame("Ledger System");
         newFrame.setDefaultCloseOperation(3);
         JPanel newPanel = new JPanel();
         JTextField getUsers = new JTextField();
@@ -80,7 +80,7 @@ public class Window {
 
         JButton userButton = new JButton("Find user");
 
-        JButton refreshBalance = new JButton("Refresh Balance");
+        JButton refreshBalance = new JButton("Refresh");
 
         JLabel currentBalance = new JLabel("Current Balance:");
         JLabel enterPublicKey = new JLabel("Search user by name: "); //finds user based on public key or name
@@ -90,17 +90,19 @@ public class Window {
         JLabel privateKey = new JLabel("Private Key: ");
         privateKey.setText("Private Key: " + server.secret.privateKeyAsString());
         JLabel welcomeUser = new JLabel();
-        welcomeUser.setText("Welcome to the Gold Card Money Transferring System, " + backup.name);
+        welcomeUser.setText("Welcome to the Ledger System, " + backup.name);
         welcomeUser.setVisible(true);
+
+        JLabel serverPort = new JLabel("Server port is https://8ce2-192-70-253-79.ngrok.io");
 
         newFrame.setSize(900, 600);
         newFrame.setVisible(true);
 
         newFrame.add(newPanel);
-        GridLayout newGrid = new GridLayout(11, 1);
+        GridLayout newGrid = new GridLayout(12, 1);
         newPanel.setLayout(newGrid);
+        newPanel.add(serverPort);
         newPanel.add(welcomeUser);
-        newPanel.add(refreshBalance);
         newPanel.add(currentBalance);
         newPanel.add(displayBalance);
         newPanel.add(enterPublicKey);
@@ -110,6 +112,7 @@ public class Window {
         newPanel.add(displayTransactions);
         newPanel.add(publicKey);
         newPanel.add(privateKey);
+        newPanel.add(refreshBalance);
         newPanel.revalidate();
 
         JFrame amountFrame = new JFrame("Transfer Funds");

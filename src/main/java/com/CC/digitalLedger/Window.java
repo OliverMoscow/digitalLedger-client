@@ -149,7 +149,7 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    server.send(displayFunds.getText(), getUsers.getText());
+//                    server.send(displayFunds.getText(), getUsers.getText());
                 } catch (Exception e1) {
                     System.out.println("Send() doesn't work");
                 }

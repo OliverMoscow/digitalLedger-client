@@ -64,14 +64,17 @@ public class ServerRequest {
         return getRequest("users/name/" + name);
     }
 
+
+
     //POST REQUESTS
-    public String send(String amount, String receiver) throws IOException, InterruptedException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    public String send(Double amount, String receiver) throws IOException, InterruptedException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+
 
         // Create HTTP client
         HttpClient client = HttpClient.newHttpClient();
 
         // Create message
-        String message = String.format("{\"receiver\":\"%s\", \"amount\": \"2%s\"}", receiver, amount).replace((char) 4, '\\');
+        String message = String.format("{\"receiver\":\"%s\", \"amount\": %f}", receiver, amount);
 
         // Encrypt message
         Cipher cipher = Cipher.getInstance("RSA");
@@ -80,7 +83,7 @@ public class ServerRequest {
         String encryptedMessage = Base64.getEncoder().encodeToString(encryptedBytes);
 
         // Create request
-        String req = String.format("{\"sender\": \"%s\", \"encrypted\": \"2%s\"}", secret.publicKeyAsString(), encryptedMessage);
+        String req = String.format("{\"sender\": \"%s\", \"encrypted\": \"%s\"}", secret.publicKeyAsString(), encryptedMessage);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(domain + "/send"))
                 .header("Content-Type", "application/json")
@@ -104,5 +107,10 @@ public class ServerRequest {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
+    }
+
+    public static void main(String[] args) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InterruptedException {
+        ServerRequest server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io");
+        server.send(100.00, "Vincent");
     }
 }

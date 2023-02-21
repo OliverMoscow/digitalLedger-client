@@ -137,7 +137,7 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    server.send();
+                    server.send(100.00, "MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAp0dj8lTQ3NdT47axsizRvlmnQ4Vu05pc9ftEO3KCF7x+KvhMtc3dBD9VsbxlCoYzsOdJ8eklr9+gtQjj9HD8mLXifUTw53f+oBrobV7LAGz4qIc+W7EvGYK7BVmdB+faTQYDpoLC/1sBe5Ls+zW5tHNxHA9UoQNz7F4RF8sZfXVa9/TOoqKLIFnivaz0Z17Wlxq9B/H9cn0FyqMohLs7bi5PsNdrFfPptmYEDw3AviVPY4uoC7B/7qikfFLtqdHh0Xu3kQtLxzCCm17VcWsAyfKIsJ8wEtTaiQXfErkRYeJVq+bNUDkznheqRW5TeKt5hr7s1cSNHiduLT3P3P20T1DwTK3isCiM71Je17XFBs07RZwNZqe48X3qnR5FESE0w7pIqRLsFQwQahvNAFdNdlnAGfMgDu6rV0b2gCjgwv74tHB4S3tYzk4PnCI+lVTZ+dsPqCSlI7p0yrkryBcVJACTiGWg6OKClHR305GV0rJg1ewOmP4rVCdqX3+r9yqnAgMBAAE=");
                 } catch (Exception e1) {
                     System.out.println("info didn't send. check button");
                 }

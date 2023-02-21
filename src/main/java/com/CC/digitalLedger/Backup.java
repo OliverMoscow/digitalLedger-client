@@ -10,20 +10,18 @@ import java.util.Scanner;
 
 //Not related to any api/db functionality
 public class Backup {
-
-
     public static boolean isInitialized() {
         File f = new File("secret.txt");
         boolean fileExist = f.exists();
         return (fileExist);
     }
 
-
     public static Secret load() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         File f = new File("secret.txt");
         if(f.createNewFile()) {
             Secret s = new Secret();
-            save(s, f);
+            String name = new String();
+            save(s, f, name);
             return s;
         } else {
             return read();
@@ -40,12 +38,13 @@ public class Backup {
         return new Secret(publicKey,privateKey);
     }
 
-    public static void save(Secret s, File f) throws IOException {
+    public static void save(Secret s, File f, String name) throws IOException {
         PrintStream fileStream = new PrintStream(f);
         fileStream.println("### PUBLIC KEY ###");
         fileStream.println(s.publicKeyAsString());
         fileStream.println("### PRIVATE KEY ###");
         fileStream.println(s.privateKeyAsString());
+        fileStream.println(name);
         fileStream.println("");
         fileStream.println("DO NOT DELETE THIS FILE!!");
         fileStream.println("This file stores your private and public key which are required to retrieve your funds in the ledger. You should probably back this up somewhere.");
@@ -62,7 +61,7 @@ class Secret {
         this.publicKey = keyPair.getPublic();
         this.privateKey = keyPair.getPrivate();
 
-        Base64.Encoder encoder = Base64.getEncoder();
+        //Base64.Encoder encoder = Base64.getEncoder();
 
     }
 
@@ -86,9 +85,9 @@ class Secret {
         return keyFactory.generatePublic(keySpec);
     }
 
-    public PublicKey publicKey() {
-        return publicKey;
-    }
+//    public PublicKey publicKey() {
+//        return publicKey;
+//    }
     public PrivateKey privateKey() {
         return privateKey;
     }

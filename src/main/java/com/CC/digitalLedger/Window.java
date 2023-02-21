@@ -7,12 +7,13 @@ import java.io.File;
 import javax.swing.*;
 
 public class Window {
+    JTextField inputUser = new JTextField();
+
     public Window() throws Exception {
         //GENERATION PAGE
         if (Backup.isInitialized() == false) {
             Secret newSecret = new Secret(); //runs constructor for secret
             File f = new File("secret.txt");
-            Backup.save(newSecret, f);
 
             //GENERATE USER PAGE
             JFrame createFrame = new JFrame("Generation Page");
@@ -20,7 +21,6 @@ public class Window {
             createFrame.setVisible(true);
             createFrame.setDefaultCloseOperation(3);
             JButton createButton = new JButton("Create Account");
-            JTextField inputUser = new JTextField();
             JLabel information = new JLabel();
             information.setText("<html>" + "Welcome to the Gold Card money transferring website! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." + "</html>");
             JLabel createUser = new JLabel("Input your name: ");
@@ -40,8 +40,9 @@ public class Window {
                     //open new window
                     inputUser.getText(); //Name is already on server
                     try {
-                        ServerRequest server = new ServerRequest("https://c956-192-70-253-79.ngrok.io");
+                        ServerRequest server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io");
                         server.instantiateUser(inputUser.getText());
+                        Backup.save(newSecret, f,inputUser.getText());
                         Backup.load();
                     } catch (Exception e2) {
                         System.out.println("Failed to retrieve user info");
@@ -62,7 +63,7 @@ public class Window {
         }
     }
     void createMainGUI() throws Exception{
-        ServerRequest server = new ServerRequest("https://7e65-192-70-253-78.ngrok.io");
+        ServerRequest server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io");
         JFrame newFrame = new JFrame("Gold Card Money Transferring System");
         newFrame.setDefaultCloseOperation(3);
         JPanel newPanel = new JPanel();
@@ -81,11 +82,13 @@ public class Window {
         JLabel currentBalance = new JLabel("Current Balance:");
         JLabel enterPublicKey = new JLabel("Search user by name: "); //finds user based on public key or name
         JLabel transactionHistory = new JLabel("Transaction History:");
-        JLabel publicKey = new JLabel("Public Key: ");
-        publicKey.setText("<html>" + server.secret.publicKeyAsString() + "</html>");
+        JLabel publicKey = new JLabel();
+        publicKey.setText("Public Key: " + server.secret.publicKeyAsString());
         JLabel privateKey = new JLabel("Private Key: ");
-        privateKey.setText("<html>" + server.secret.privateKeyAsString() + "</html>");
-        JLabel welcomeUser = new JLabel("Welcome to the Gold Card Money Transferring System, " + server.currentUser());
+        privateKey.setText("Private Key: " + server.secret.privateKeyAsString());
+        JLabel welcomeUser = new JLabel();
+        welcomeUser.setText("Welcome to the Gold Card Money Transferring System, " + inputUser.getText());
+        welcomeUser.setVisible(true);
 
         newFrame.setSize(900, 600);
         newFrame.setVisible(true);
@@ -105,7 +108,7 @@ public class Window {
         newPanel.add(privateKey);
         newPanel.revalidate();
 
-        JFrame amountFrame = new JFrame("User: " + server.currentUser());
+        JFrame amountFrame = new JFrame("Transfer Funds");
         JButton sendButton = new JButton("Transfer Funds");
 
         class userButtonListener implements ActionListener {
@@ -115,6 +118,7 @@ public class Window {
                     server.getUserFromName(getUsers.getText());
                 } catch (Exception e3) {
                     System.out.println("Failed to retrieve user. Account probably doesn't exist");
+                    //probably need to do a boolean for this like boolean getUser == true, then open window, else Jframe says not true
                 }
                 amountFrame.setVisible(true);
                 amountFrame.setSize(400, 200);
@@ -122,9 +126,12 @@ public class Window {
                 amountFrame.add(amountPanel);
                 JTextField displayFunds = new JTextField(); //for the second window
                 JLabel newWindowLabel = new JLabel("Enter amount: ");
+                JLabel otherUser = new JLabel();
+                otherUser.setText("User: " + getUsers.getText());
 
-                GridLayout grid = new GridLayout(3, 1);
+                GridLayout grid = new GridLayout(4, 1);
                 amountPanel.setLayout(grid);
+                amountPanel.add(otherUser);
                 amountPanel.add(newWindowLabel);
                 amountPanel.add(displayFunds);
                 amountPanel.add(sendButton);
@@ -142,7 +149,6 @@ public class Window {
                     System.out.println("info didn't send. check button");
                 }
                 amountFrame.dispose();
-                System.out.println("Money successfully transferred");
             }
         }
         sendButton.addActionListener(new sendButtonListener());

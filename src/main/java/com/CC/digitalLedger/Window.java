@@ -112,6 +112,8 @@ public class Window {
         JFrame amountFrame = new JFrame("Transfer Funds");
         JButton sendButton = new JButton("Transfer Funds");
 
+        JTextField displayFunds = new JTextField(); //for the second window
+
         class userButtonListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -125,7 +127,6 @@ public class Window {
                 amountFrame.setSize(400, 200);
                 JPanel amountPanel = new JPanel();
                 amountFrame.add(amountPanel);
-                JTextField displayFunds = new JTextField(); //for the second window
                 JLabel newWindowLabel = new JLabel("Enter amount: ");
                 JLabel otherUser = new JLabel();
                 otherUser.setText("User: " + getUsers.getText());
@@ -145,7 +146,7 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    server.send(getUsers.getText());
+                    server.send(displayFunds.getText(), getUsers.getText());
                 } catch (Exception e1) {
                     System.out.println("Send() doesn't work");
                 }

@@ -67,7 +67,7 @@ public class ServerRequest {
 
 
     //POST REQUESTS
-    public String send(Double amount, String receiver) throws IOException, InterruptedException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    public String send(String amount, String receiver) throws IOException, InterruptedException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
         // Create HTTP client
         HttpClient client = HttpClient.newHttpClient();

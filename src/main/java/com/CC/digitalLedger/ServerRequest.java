@@ -47,8 +47,7 @@ public class ServerRequest {
 
     public String getBalance() throws IOException, InterruptedException {
         return getRequest("balance/" + secret.publicKeyAsString());
-    } //USER INFO for public key and name
-
+    }
 
     public String getUsers() throws IOException, InterruptedException { //returns every single user
         return getRequest("users");
@@ -82,7 +81,6 @@ public class ServerRequest {
                 .POST(HttpRequest.BodyPublishers.ofString(req))
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
-                //INCOMPLETE: Set headers for post request. See google doc. https://www.baeldung.com/java-9-http-client.
                 .uri(URI.create(domain + "/send"))
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

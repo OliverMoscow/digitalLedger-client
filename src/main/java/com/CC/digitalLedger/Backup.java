@@ -10,14 +10,11 @@ import java.util.Scanner;
 
 //Not related to any api/db functionality
 public class Backup {
-
-
     public static boolean isInitialized() {
         File f = new File("secret.txt");
         boolean fileExist = f.exists();
         return (fileExist);
     }
-
 
     public static Secret load() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         File f = new File("secret.txt");
@@ -88,9 +85,9 @@ class Secret {
         return keyFactory.generatePublic(keySpec);
     }
 
-    public PublicKey publicKey() {
-        return publicKey;
-    }
+//    public PublicKey publicKey() {
+//        return publicKey;
+//    }
     public PrivateKey privateKey() {
         return privateKey;
     }

@@ -13,16 +13,11 @@ import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
-
-//runs on http://127.0.0.1 or localhost, which means your own computer
 public class ServerRequest {
     public String domain;
     public Secret secret;
 
-
-    public Base64.Encoder encoder = Base64.getEncoder();
-
-
+    //public Base64.Encoder encoder = Base64.getEncoder();
     public ServerRequest(String domain) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
         this.domain = domain;
         this.secret = Backup.load();
@@ -40,7 +35,6 @@ public class ServerRequest {
         return response.body();
     }
 
-
     public String getLedger() throws IOException, InterruptedException {
         return getRequest("ledger");
     }
@@ -49,21 +43,9 @@ public class ServerRequest {
         return getRequest("balance/" + secret.publicKeyAsString());
     }
 
-    public String getUsers() throws IOException, InterruptedException { //returns every single user
-        return getRequest("users");
-    }
-
-
-    public String currentUser() throws IOException, InterruptedException { //pick this one or next one
-        return getRequest("users/" + secret.publicKeyAsString());
-    }
-
-
     public String getUserFromName(String name) throws IOException, InterruptedException {
         return getRequest("users/name/" + name);
     }
-
-
 
     //POST REQUESTS
     public String send() throws IOException, InterruptedException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {

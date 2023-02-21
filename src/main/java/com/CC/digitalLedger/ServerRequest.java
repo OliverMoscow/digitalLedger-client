@@ -73,7 +73,7 @@ public class ServerRequest {
         HttpClient client = HttpClient.newHttpClient();
 
         // Create message
-        String message = String.format("{\"receiver\":\"%s\", \"amount\": %f}", receiver, amount);
+        String message = String.format("{\"receiver\":\"%s\", \"amount\": \"2%f\"}", receiver, amount).replace((char) 4, '\\');
 
         // Encrypt message
         Cipher cipher = Cipher.getInstance("RSA");
@@ -82,7 +82,7 @@ public class ServerRequest {
         String encryptedMessage = Base64.getEncoder().encodeToString(encryptedBytes);
 
         // Create request
-        String req = String.format("{\"sender\": \"%s\", \"encrypted\": \"%s\"}", secret.publicKeyAsString(), encryptedMessage);
+        String req = String.format("{\"sender\": \"%s\", \"encrypted\": \"2%s\"}", secret.publicKeyAsString(), encryptedMessage);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(domain + "/send"))
                 .header("Content-Type", "application/json")

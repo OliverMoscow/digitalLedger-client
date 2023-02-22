@@ -24,7 +24,7 @@ public class Window {
             createFrame.setDefaultCloseOperation(3);
             JButton createButton = new JButton("Create Account");
             JLabel information = new JLabel();
-            information.setText("<html>" + "Welcome to the Gold Card money transferring website! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." + "</html>");
+            information.setText("<html>" + "Welcome to the Didgital Ledger! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." + "</html>");
             JLabel createUser = new JLabel("Input your name: ");
 
             JPanel createPanel = new JPanel();

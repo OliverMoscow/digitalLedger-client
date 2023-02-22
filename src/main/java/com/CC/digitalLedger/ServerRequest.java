@@ -25,6 +25,7 @@ public class ServerRequest {
 
     public ServerRequest(String domain, Backup backup) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
         this.domain = domain;
+        System.out.println("Running on port: " + domain);
         this.secret = backup.secret;
         this.username = backup.name;
     }

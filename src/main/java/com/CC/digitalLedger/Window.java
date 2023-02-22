@@ -24,7 +24,7 @@ public class Window {
             createFrame.setDefaultCloseOperation(3);
             JButton createButton = new JButton("Create Account");
             JLabel information = new JLabel();
-            information.setText("<html>" + "Welcome to the Gold Card money transferring website! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." + "</html>");
+            information.setText("<html>" + "Welcome to Digital Ledger! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." + "</html>");
             JLabel createUser = new JLabel("Input your name: ");
 
             JPanel createPanel = new JPanel();
@@ -65,7 +65,7 @@ public class Window {
         if(server == null) {
             server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io", backup);
         }
-        JFrame newFrame = new JFrame("Gold Card Money Transferring System");
+        JFrame newFrame = new JFrame("Digital Ledger Money Transfer");
         newFrame.setDefaultCloseOperation(3);
         JPanel newPanel = new JPanel();
         JTextField getUsers = new JTextField();
@@ -88,7 +88,7 @@ public class Window {
         JLabel privateKey = new JLabel("Private Key: ");
         privateKey.setText("Private Key: " + server.secret.privateKeyAsString());
         JLabel welcomeUser = new JLabel();
-        welcomeUser.setText("Welcome to the Gold Card Money Transferring System, " + backup.name);
+        welcomeUser.setText(backup.name +", Welcome to your digital ledger portal!");
         welcomeUser.setVisible(true);
 
         newFrame.setSize(900, 600);

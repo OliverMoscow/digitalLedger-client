@@ -24,7 +24,7 @@ public class Window {
             createFrame.setDefaultCloseOperation(3);
             JButton createButton = new JButton("Create Account");
             JLabel information = new JLabel();
-            information.setText("<html>" + "Welcome to Digital Ledger! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." + "</html>");
+            information.setText("<html>" + "Welcome to the Gold Card money transferring website! By clicking 'Create Account', we will have generated a pair of public and private keys for you, which you will be able to see on the home page. DO NOT SHARE YOUR PRIVATE KEY INFORMATION." + "</html>");
             JLabel createUser = new JLabel("Input your name: ");
 
             JPanel createPanel = new JPanel();
@@ -65,7 +65,7 @@ public class Window {
         if(server == null) {
             server = new ServerRequest("https://8ce2-192-70-253-79.ngrok.io", backup);
         }
-        JFrame newFrame = new JFrame("Digital Ledger Money Transfer");
+        JFrame newFrame = new JFrame("Ledger System");
         newFrame.setDefaultCloseOperation(3);
         JPanel newPanel = new JPanel();
         JTextField getUsers = new JTextField();
@@ -80,6 +80,8 @@ public class Window {
 
         JButton userButton = new JButton("Find user");
 
+        JButton refreshBalance = new JButton("Refresh");
+
         JLabel currentBalance = new JLabel("Current Balance:");
         JLabel enterPublicKey = new JLabel("Search user by name: "); //finds user based on public key or name
         JLabel transactionHistory = new JLabel("Transaction History:");
@@ -88,15 +90,18 @@ public class Window {
         JLabel privateKey = new JLabel("Private Key: ");
         privateKey.setText("Private Key: " + server.secret.privateKeyAsString());
         JLabel welcomeUser = new JLabel();
-        welcomeUser.setText(backup.name +", Welcome to your digital ledger portal!");
+        welcomeUser.setText("Welcome to the Ledger System, " + backup.name);
         welcomeUser.setVisible(true);
+
+        JLabel serverPort = new JLabel("Server port is https://8ce2-192-70-253-79.ngrok.io");
 
         newFrame.setSize(900, 600);
         newFrame.setVisible(true);
 
         newFrame.add(newPanel);
-        GridLayout newGrid = new GridLayout(10, 1);
+        GridLayout newGrid = new GridLayout(12, 1);
         newPanel.setLayout(newGrid);
+        newPanel.add(serverPort);
         newPanel.add(welcomeUser);
         newPanel.add(currentBalance);
         newPanel.add(displayBalance);
@@ -107,6 +112,7 @@ public class Window {
         newPanel.add(displayTransactions);
         newPanel.add(publicKey);
         newPanel.add(privateKey);
+        newPanel.add(refreshBalance);
         newPanel.revalidate();
 
         JFrame amountFrame = new JFrame("Transfer Funds");
@@ -155,6 +161,19 @@ public class Window {
             }
         }
         sendButton.addActionListener(new sendButtonListener());
+
+        class refreshButtonListener implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newFrame.dispose();
+                try {
+                    createMainGUI();
+                }catch(Exception e7){
+                        System.out.println("You can't do this");
+                    }
+            }
+        }
+        refreshBalance.addActionListener(new refreshButtonListener());
     }
 }
 
